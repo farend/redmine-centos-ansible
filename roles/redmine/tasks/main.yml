@@ -1,0 +1,72 @@
+- name: ImageMagickと日本語フォント(IPA Pゴシック)のインストール
+  sudo: yes
+  yum: name='ImageMagick,ImageMagick-devel,ipa-pgothic-fonts'
+
+- name: Redmineのソースコードをチェックアウト
+  sudo: yes
+  subversion:
+    repo={{ redmine_svn_url }}
+    dest={{ redmine_dir }}
+
+- name: database.ymlの作成
+  sudo: yes
+  template:
+    src=database.yml
+    dest={{ redmine_dir }}/config/database.yml
+
+- name: configuration.ymlの作成
+  sudo: yes
+  template:
+    src=configuration.yml
+    dest={{ redmine_dir }}/config/configuration.yml
+
+- name: gemsパッケージのインストール
+  sudo: yes
+  command:
+    bundle install --path vendor/bundle
+    chdir={{ redmine_dir }}
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+
+- name: secret tokenの作成
+  sudo: yes
+  command:
+    bundle exec rake generate_secret_token
+    chdir={{ redmine_dir }}
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+    RAILS_ENV: production
+
+- name: データベースのマイグレーション
+  sudo: yes
+  command:
+    bundle exec rake db:migrate
+    chdir={{ redmine_dir }}
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+    RAILS_ENV: production
+
+- name: デフォルトデータ(日本語)をロード
+  sudo: yes
+  command:
+    /usr/local/bin/bundle exec rake redmine:load_default_data
+    chdir={{ redmine_dir }}
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+    RAILS_ENV: production
+    REDMINE_LANG: ja
+
+- name: farend_basicテーマのダウンロード
+  sudo: yes
+  git:
+    repo=https://github.com/farend/redmine_theme_farend_basic.git
+    dest={{ redmine_dir }}/public/themes/farend_basic
+
+- name: テーマをfarend_basicに切り替え
+  sudo: yes
+  command:
+    bundle exec rails r 'Setting["ui_theme"]="farend_basic"'
+    chdir={{ redmine_dir }}
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+    RAILS_ENV: production

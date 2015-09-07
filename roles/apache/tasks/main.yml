@@ -1,0 +1,59 @@
+- name: Apacheのインストール
+  sudo: yes
+  yum: name='httpd,httpd-devel'
+
+- name: Redmineディレクトリ以下のオーナーを変更
+  sudo: yes
+  command:
+    chown -R apache:apache {{ redmine_dir }}
+
+- name: Passengerがインストールされているか確認
+  command:
+    test -f /usr/local/bin/passenger-install-apache2-module
+  register:
+    result
+  failed_when: result.rc not in [0, 1]
+  changed_when: false
+
+- name: Passengerをインストール
+  sudo: yes
+  command:
+    gem install passenger --no-rdoc --no-ri
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+  when: result.rc == 1
+
+- name: PassengerのApache用モジュールのインストール
+  sudo: yes
+  command:
+    passenger-install-apache2-module --auto
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+  when: result.rc == 1
+
+- name: PassengerのApache用モジュールの設定を取得
+  command:
+    passenger-install-apache2-module --snippet
+  register:
+    passenger_snippet_vars
+  changed_when: false
+
+- name: redmine.confの作成
+  sudo: yes
+  template:
+    src=redmine.conf
+    dest=/etc/httpd/conf.d/redmine.conf
+
+- name: DocumentRootをRedmineのpublicに変更
+  sudo: yes
+  lineinfile:
+    dest=/etc/httpd/conf/httpd.conf
+    backup=yes
+    regexp='^DocumentRoot .*'
+    line='DocumentRoot "/var/lib/redmine/public"'
+
+- name: httpdの再起動
+  sudo: yes
+  service:
+    name=httpd
+    state=restarted

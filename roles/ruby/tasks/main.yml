@@ -1,0 +1,51 @@
+- name: Rubyがインストールされているか確認
+  command:
+    test -f {{ ruby_file_name }}
+  register:
+    ruby_test_vars
+  failed_when: ruby_test_vars.rc not in [0, 1]
+  changed_when: false
+
+- name: Rubyのビルドに必要なパッケージのインストール
+  sudo: yes
+  yum: name='openssl-devel,readline-devel,zlib-devel,curl-devel,libyaml-devel,libffi-devel'
+  when: ruby_test_vars.rc == 1
+
+- name: 作業ディレクトリ作成
+  file: path={{ work_dir }} state=directory mode=0755
+  when: ruby_test_vars.rc == 1
+
+- name: Rubyのソースコードのダウンロード
+  get_url:
+    url={{ ruby_url_dir }}/{{ ruby_archive_version }}.{{ ruby_archive_ext }}
+    dest={{ work_dir }}
+  when: ruby_test_vars.rc == 1
+
+- name: Rubyのソースコードを展開
+  unarchive: src={{ work_dir }}/ruby-2.2.3.tar.gz dest={{ work_dir }} copy=no
+  when: ruby_test_vars.rc == 1
+
+- name: Rubyのビルド1 (configure)
+  command:
+    ./configure --disable-install-doc
+    chdir={{ work_dir }}/{{ ruby_archive_version }}
+  when: ruby_test_vars.rc == 1
+
+- name: Rubyのビルド2 (make)
+  command:
+    make
+    chdir={{ work_dir }}/{{ ruby_archive_version }}
+  when: ruby_test_vars.rc == 1
+
+- name: Rubyのインストール
+  sudo: yes
+  command:
+    make install
+    chdir={{ work_dir }}/{{ ruby_archive_version }}
+  when: ruby_test_vars.rc == 1
+
+- name: bundlerのインストール
+  sudo: yes
+  command: gem install bundler --no-rdoc --no-ri
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"

@@ -1,0 +1,58 @@
+- name: MariaDBのインストール
+  sudo: yes
+  yum: name='mariadb-server,mariadb-devel'
+
+- name: MySQL-pythonのインストール (Ansibleが使用)
+  sudo: yes
+  yum: name='MySQL-python'
+
+- name: /etc/my.cnfを作成
+  sudo: yes
+  template: src=my.cnf dest=/etc/my.cnf owner=root group=root mode=0644
+
+- name: MariaDB 起動・自動起動設定
+  sudo: yes
+  service: name=mariadb state=started enabled=yes
+
+- name: 匿名ユーザー削除
+  mysql_user:
+    name=''
+    state=absent
+  register:
+    result
+  ignore_errors: true
+
+- name: エラー処理
+  fail: msg="デフォルトのrootユーザーでの接続に失敗しました。MariaDBがインストール直後の状態ではありません。Redmineのインストールを中止します。"
+  when: result.failed is defined
+
+- name: リモートからのrootログインを禁止
+  mysql_user:
+    name=root
+    host={{ ansible_fqdn }}
+    state=absent
+
+- name: testデータベース 削除
+  mysql_db:
+    name=test
+    state=absent
+
+- name: Redmine用データベース作成
+  mysql_db:
+    name=db_redmine
+
+- name: Redmine用ユーザー作成
+  mysql_user:
+    name=user_redmine
+    password={{ db_passwd_redmine }}
+    priv=db_redmine.*:ALL
+
+- name: rootパスワード設定
+  mysql_user:
+    name=root
+    host={{ item }}
+    password={{ db_passwd_root }}
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost

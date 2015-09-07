@@ -1,0 +1,21 @@
+# ----------------------------------------------------------------------
+# MariaDBのrootユーザーのパスワード。Ansible実行前に変更してください。
+db_passwd_root: Must_be_changed!
+
+# MariaDBのredmine用ユーザーのパスワード。Ansible実行前に変更してください。
+db_passwd_redmine: Must_be_changed!
+# ----------------------------------------------------------------------
+
+# Redmineのチェックアウト元URL
+redmine_svn_url: http://svn.redmine.org/redmine/branches/3.1-stable
+
+# Redmineのデプロイ先URL
+redmine_dir: /var/lib/redmine
+
+# ダウンロードするRubyのソースコード
+ruby_url_dir: https://cache.ruby-lang.org/pub/ruby/2.2
+ruby_archive_version: ruby-2.2.3
+ruby_archive_ext: tar.gz
+
+ruby_file_name: /usr/local/bin/ruby
+work_dir: /tmp/redmine-setup

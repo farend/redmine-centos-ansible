@@ -1,0 +1,29 @@
+- name: SELinuxの状態確認
+  command:
+    /usr/sbin/selinuxenabled
+  register:
+    result
+  changed_when: false
+  failed_when: result.rc not in [0, 1]
+
+- name: 起動時にSELinux無効化 (/etc/sysconfig/selinux)
+  sudo: yes
+  selinux: state=disabled
+  when: result.rc == 0
+
+- name: SELinux無効化 (setenforce)
+  sudo: yes
+  command: setenforce 0
+  when: result.rc == 0
+
+- name: firewalldでHTTPを許可
+  sudo: yes
+  command: firewall-cmd --zone=public --add-service=http --permanent
+
+- name: firewalldのポリシーをリロード
+  sudo: yes
+  command: firewall-cmd --reload
+
+- name: 開発ツールのインストール
+  sudo: yes
+  yum: name='@Development Tools'

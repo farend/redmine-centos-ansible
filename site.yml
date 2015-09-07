@@ -1,0 +1,13 @@
+- hosts: redmine-servers
+
+  roles:
+    - system
+    - mariadb
+    - ruby
+    - redmine
+    - apache
+
+  post_tasks:
+    - name: 完了
+      debug:
+        msg='インストールが完了しました。 http://IPアドレス/ にアクセスしてください。'

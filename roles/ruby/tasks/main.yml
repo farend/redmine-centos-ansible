@@ -17,12 +17,15 @@
 
 - name: Rubyのソースコードのダウンロード
   get_url:
-    url={{ ruby_url_dir }}/{{ ruby_archive_version }}.{{ ruby_archive_ext }}
+    url={{ ruby_url_dir }}/{{ ruby_archive_name }}
     dest={{ work_dir }}
   when: ruby_test_vars.rc == 1
 
 - name: Rubyのソースコードを展開
-  unarchive: src={{ work_dir }}/ruby-2.2.3.tar.gz dest={{ work_dir }} copy=no
+  unarchive:
+    src={{ work_dir }}/{{ ruby_archive_name }}
+    dest={{ work_dir }}
+    copy=no
   when: ruby_test_vars.rc == 1
 
 - name: Rubyのビルド1 (configure)

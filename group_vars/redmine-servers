@@ -1,8 +1,9 @@
 # ----------------------------------------------------------------------
-# MariaDBのrootユーザーのパスワード。Ansible実行前に変更してください。
+# MariaDBのユーザーに設定するパスワード。変更推奨。
+# root
 db_passwd_root: Must_be_changed!
 
-# MariaDBのredmine用ユーザーのパスワード。Ansible実行前に変更してください。
+# user_redmine (RedmineからMariaDBに接続するときのユーザー)
 db_passwd_redmine: Must_be_changed!
 # ----------------------------------------------------------------------
 

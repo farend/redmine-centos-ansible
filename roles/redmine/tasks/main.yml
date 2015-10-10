@@ -70,3 +70,30 @@
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
     RAILS_ENV: production
+
+- name: デフォルトの言語を日本語に変更
+  sudo: yes
+  command:
+    bundle exec rails r 'Setting["default_language"]="ja"'
+    chdir={{ redmine_dir }}
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+    RAILS_ENV: production
+
+- name: ユーザー名の表示形式を「姓 名」に変更
+  sudo: yes
+  command:
+    bundle exec rails r 'Setting["user_format"]=:lastname_firstname'
+    chdir={{ redmine_dir }}
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+    RAILS_ENV: production
+
+- name: 添付ファイルとリポジトリのエンコーディングを設定
+  sudo: yes
+  command:
+    bundle exec rails r 'Setting["repositories_encodings"]="UTF-8,CP932,EUC-JP"'
+    chdir={{ redmine_dir }}
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+    RAILS_ENV: production

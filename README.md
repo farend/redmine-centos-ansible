@@ -3,6 +3,8 @@
 
 最小構成でインストールしたCentOSにRedmineを自動インストールするためのAnsibleプレイブックです。
 
+コマンド5個実行するだけで、あとはしばらく放置すればインストールが完了します。
+
 
 ## 概要 
 
@@ -35,7 +37,6 @@ yum install -y ansible git
 
 ```
 git clone https://github.com/farend/redmine-centos7-mariadb-ansible.git
-cd redmine-centos7-mariadb-ansible
 ```
 
 ### MariaDBに設定するパスワードの変更
@@ -47,6 +48,7 @@ cd redmine-centos7-mariadb-ansible
 下記コマンドを実行してください。Redmineの自動インストールが開始されます。
 
 ```
+cd redmine-centos7-mariadb-ansible
 ansible-playbook -i hosts site.yml
 ```
 

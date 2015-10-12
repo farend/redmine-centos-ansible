@@ -97,3 +97,11 @@
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
     RAILS_ENV: production
+
+- name: 添付ファイルのサムネイルを表示
+  command:
+    bundle exec rails r 'Setting["thumbnails_enabled"]="1"'
+    chdir={{ redmine_dir }}
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+    RAILS_ENV: production

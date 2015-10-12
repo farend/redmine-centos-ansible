@@ -99,6 +99,7 @@
     RAILS_ENV: production
 
 - name: 添付ファイルのサムネイルを表示
+  sudo: yes
   command:
     bundle exec rails r 'Setting["thumbnails_enabled"]="1"'
     chdir={{ redmine_dir }}

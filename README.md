@@ -1,4 +1,4 @@
-# redmine-centos7-ansible
+# redmine-centos-ansible
 
 
 最小構成でインストールしたCentOSにRedmineを自動インストールするためのAnsibleプレイブックです。
@@ -36,7 +36,7 @@ yum install -y ansible git
 ### playbookのダウンロード
 
 ```
-git clone https://github.com/farend/redmine-centos7-ansible.git
+git clone https://github.com/farend/redmine-centos-ansible.git
 ```
 
 ### PostgreSQLに設定するパスワードの変更

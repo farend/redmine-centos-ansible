@@ -27,3 +27,33 @@
 - name: 開発ツールのインストール
   sudo: yes
   yum: name='@Development Tools'
+
+- name: RubyとPassengerのビルドに必要な開発ツールやヘッダファイルのインストール
+  sudo: yes
+  yum:
+    name='openssl-devel,readline-devel,zlib-devel,curl-devel,libyaml-devel,libffi-devel'
+
+- name:  PostgreSQLとヘッダファイルのインストール
+  sudo: yes
+  yum:
+    name='postgresql-server,postgresql-devel,python-psycopg2'
+
+- name: Apacheとヘッダファイルのインストール
+  sudo: yes
+  yum:
+    name='httpd,httpd-devel'
+
+- name: ImageMagickとヘッダファイル・日本語フォントのインストール
+  sudo: yes
+  yum:
+    name='ImageMagick,ImageMagick-devel,ipa-pgothic-fonts'
+
+- name: そのほかのツールのインストール
+  sudo: yes
+  yum:
+    name='subversion,git'
+
+- name: 作業ディレクトリ作成
+  file: path={{ work_dir }}
+    state=directory
+    mode=0755

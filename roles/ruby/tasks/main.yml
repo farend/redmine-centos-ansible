@@ -6,27 +6,26 @@
   failed_when: ruby_test_vars.rc not in [0, 1]
   changed_when: false
 
-- name: Rubyのビルドに必要なパッケージのインストール
-  sudo: yes
-  yum: name='openssl-devel,readline-devel,zlib-devel,curl-devel,libyaml-devel,libffi-devel'
-  when: ruby_test_vars.rc == 1
-
-- name: 作業ディレクトリ作成
-  file: path={{ work_dir }} state=directory mode=0755
-  when: ruby_test_vars.rc == 1
+- name: Rubyがダウンロード済みか確認
+  command:
+    test -f {{ work_dir }}/{{ ruby_archive_version }}
+  register:
+    ruby_src_test_vars
+  failed_when: ruby_test_vars.rc not in [0, 1]
+  changed_when: false
 
 - name: Rubyのソースコードのダウンロード
   get_url:
     url={{ ruby_url_dir }}/{{ ruby_archive_name }}
     dest={{ work_dir }}
-  when: ruby_test_vars.rc == 1
+  when: ruby_test_vars.rc == 1 and ruby_src_test_vars.rc == 1
 
 - name: Rubyのソースコードを展開
   unarchive:
     src={{ work_dir }}/{{ ruby_archive_name }}
     dest={{ work_dir }}
     copy=no
-  when: ruby_test_vars.rc == 1
+  when: ruby_test_vars.rc == 1 and ruby_src_test_vars.rc == 1
 
 - name: Rubyのビルド1 (configure)
   command:
@@ -49,6 +48,8 @@
 
 - name: bundlerのインストール
   sudo: yes
-  command: gem install bundler --no-rdoc --no-ri
+  gem:
+    name=bundler
+    user_install=no
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"

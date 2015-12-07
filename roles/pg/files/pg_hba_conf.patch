@@ -1,0 +1,11 @@
+--- pg_hba.conf.org	2015-12-06 15:49:05.282188570 +0900
++++ pg_hba.conf	2015-12-06 15:33:01.377197287 +0900
+@@ -71,6 +71,8 @@
+ # "host" records.  In that case you will also need to make PostgreSQL
+ # listen on a non-local interface via the listen_addresses
+ # configuration parameter, or via the -i or -h command line switches.
++host    redmine         redmine         127.0.0.1/32            md5
++host    redmine         redmine         ::1/128                 md5
+ 
+ 
+ 

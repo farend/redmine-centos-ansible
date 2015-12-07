@@ -1,17 +1,22 @@
 # ----------------------------------------------------------------------
-# MariaDBのユーザーに設定するパスワード。変更推奨。
-# root
-db_passwd_root: Must_be_changed!
-
-# user_redmine (RedmineからMariaDBに接続するときのユーザー)
+# データベースの redmine ユーザーのパスワード (変更推奨)
 db_passwd_redmine: Must_be_changed!
 # ----------------------------------------------------------------------
 
 # Redmineのチェックアウト元URL
-redmine_svn_url: http://svn.redmine.org/redmine/branches/3.1-stable
+redmine_svn_url: http://svn.redmine.org/redmine/branches/3.2-stable
 
-# Redmineのデプロイ先URL
+# Redmineのデプロイ先ディレクトリ
 redmine_dir: /var/lib/redmine
+
+# Redmineのデプロイ先ディレクトリのオーナー:グループ
+redmine_dir_owner: apache:apache
+
+# Redmineで使用する日本語フォントファイル
+redmine_font_path: /usr/share/fonts/truetype/takao-gothic/TakaoPGothic.ttf
+
+# pg_hba.confのパス
+pg_hba_conf_path: /var/lib/pgsql/data/pg_hba.conf
 
 # ダウンロードするRubyのソースコード
 ruby_url_dir: https://cache.ruby-lang.org/pub/ruby/2.2

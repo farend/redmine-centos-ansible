@@ -1,0 +1,55 @@
+- name: PostgreSQL initdb
+  command:
+    postgresql-setup initdb
+  register:
+    result
+  failed_when: result.rc not in [0, 1]
+  changed_when: result.rc == 0
+
+- name: pg_hba.confにredmine用設定が存在するか確認
+  sudo: yes
+  command:
+    grep redmine {{ pg_hba_conf_path }}
+  register:
+    result_pg_hba
+  failed_when: result_pg_hba.rc not in [0, 1]
+  changed_when: false
+
+- name: pg_hba.conf設定変更用パッチを配置
+  sudo: yes
+  copy:
+    src=pg_hba_conf.patch
+    dest={{ work_dir }}
+  when:
+    result_pg_hba.rc == 1
+
+- name: pg_hba.confにredmine用設定を追加
+  sudo: yes
+  shell:
+    patch -tNp0 {{ pg_hba_conf_path }} < {{ work_dir }}/pg_hba_conf.patch
+  when:
+    result_pg_hba.rc == 1
+
+- name: PostgreSQL起動
+  sudo: yes
+  service:
+    name=postgresql
+    state=restarted
+    enabled=yes
+
+- name: PostgreSQL ユーザー作成
+  sudo: yes
+  sudo_user: postgres
+  postgresql_user:
+    name=redmine
+    password={{ db_passwd_redmine }}
+
+- name: PostgreSQL データベース作成
+  sudo: yes
+  sudo_user: postgres
+  postgresql_db:
+    name=redmine
+    encoding='UTF-8'
+    lc_collate='ja_JP.UTF-8'
+    lc_ctype='ja_JP.UTF-8'
+    template='template0'

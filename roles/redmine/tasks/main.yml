@@ -1,7 +1,3 @@
-- name: ImageMagickと日本語フォント(IPA Pゴシック)のインストール
-  sudo: yes
-  yum: name='ImageMagick,ImageMagick-devel,ipa-pgothic-fonts'
-
 - name: Redmineのソースコードをチェックアウト
   sudo: yes
   subversion:
@@ -13,12 +9,24 @@
   template:
     src=database.yml
     dest={{ redmine_dir }}/config/database.yml
+    force=no
+  register:
+    result_database_yml
 
 - name: configuration.ymlの作成
   sudo: yes
   template:
     src=configuration.yml
     dest={{ redmine_dir }}/config/configuration.yml
+    force=no
+
+- name: Gemfile.lockが存在するか確認
+  command:
+    test -f {{ redmine_dir }}/Gemfile.lock
+  register:
+    result_test_gemfile
+  failed_when: result_test_gemfile.rc not in [0, 1]
+  changed_when: false
 
 - name: gemsパッケージのインストール
   sudo: yes
@@ -27,6 +35,18 @@
     chdir={{ redmine_dir }}
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+  when:
+    result_test_gemfile.rc == 1
+
+- name: gemsパッケージのアップデート
+  sudo: yes
+  command:
+    bundle update
+    chdir={{ redmine_dir }}
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+  when:
+    result_test_gemfile.rc == 0
 
 - name: secret tokenの作成
   sudo: yes
@@ -49,12 +69,14 @@
 - name: デフォルトデータ(日本語)をロード
   sudo: yes
   command:
-    /usr/local/bin/bundle exec rake redmine:load_default_data
+    bundle exec rake redmine:load_default_data
     chdir={{ redmine_dir }}
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
     RAILS_ENV: production
     REDMINE_LANG: ja
+  when:
+    result_database_yml|changed
 
 - name: farend_basicテーマのダウンロード
   sudo: yes
@@ -70,6 +92,8 @@
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
     RAILS_ENV: production
+  when:
+    result_database_yml|changed
 
 - name: デフォルトの言語を日本語に変更
   sudo: yes
@@ -79,6 +103,8 @@
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
     RAILS_ENV: production
+  when:
+    result_database_yml|changed
 
 - name: ユーザー名の表示形式を「姓 名」に変更
   sudo: yes
@@ -88,6 +114,8 @@
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
     RAILS_ENV: production
+  when:
+    result_database_yml|changed
 
 - name: 添付ファイルとリポジトリのエンコーディングを設定
   sudo: yes
@@ -97,6 +125,8 @@
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
     RAILS_ENV: production
+  when:
+    result_database_yml|changed
 
 - name: 添付ファイルのサムネイルを表示
   sudo: yes
@@ -106,3 +136,5 @@
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
     RAILS_ENV: production
+  when:
+    result_database_yml|changed

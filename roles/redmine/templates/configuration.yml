@@ -6,4 +6,4 @@ production:
       port: 25
       domain: "{{ ansible_fqdn }}"
 
-  rmagick_font_path: /usr/share/fonts/ipa-pgothic/ipagp.ttf
+  rmagick_font_path: {{ redmine_font_path }}

@@ -1,7 +1,8 @@
 production:
-  adapter: mysql2
-  database: db_redmine
+  adapter: postgresql
+  database: redmine
   host: localhost
-  username: user_redmine
+  username: redmine
   password: "{{ db_passwd_redmine }}"
   encoding: utf8
+  pool: 5

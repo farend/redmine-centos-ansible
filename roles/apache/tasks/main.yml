@@ -1,11 +1,7 @@
-- name: Apacheのインストール
-  sudo: yes
-  yum: name='httpd,httpd-devel'
-
 - name: Redmineディレクトリ以下のオーナーを変更
   sudo: yes
   command:
-    chown -R apache:apache {{ redmine_dir }}
+    chown -R {{ redmine_dir_owner }} {{ redmine_dir }}
 
 - name: Passengerがインストールされているか確認
   command:
@@ -17,8 +13,9 @@
 
 - name: Passengerをインストール
   sudo: yes
-  command:
-    gem install passenger --no-rdoc --no-ri
+  gem:
+    name=passenger
+    user_install=no
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
   when: result.rc == 1
@@ -44,13 +41,12 @@
     src=redmine.conf
     dest=/etc/httpd/conf.d/redmine.conf
 
-- name: DocumentRootをRedmineのpublicに変更
+- name: Redmineに /redmine でアクセスするためのシンボリックリンク作成
   sudo: yes
-  lineinfile:
-    dest=/etc/httpd/conf/httpd.conf
-    backup=yes
-    regexp='^DocumentRoot .*'
-    line='DocumentRoot "/var/lib/redmine/public"'
+  file:
+    state=link
+    src={{ redmine_dir }}/public
+    dest=/var/www/html/redmine
 
 - name: httpdの再起動
   sudo: yes

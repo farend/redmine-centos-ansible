@@ -61,7 +61,7 @@
 - name: そのほかのツールのインストール
   sudo: yes
   yum:
-    name='subversion,git'
+    name='git'
 
 - name: 作業ディレクトリ作成
   file: path={{ work_dir }}

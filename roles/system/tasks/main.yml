@@ -16,13 +16,23 @@
   command: setenforce 0
   when: result.rc == 0
 
+- name: firewalldが起動しているか確認
+  sudo: yes
+  shell: firewall-cmd --state; echo $?
+  register: firewalld_is_running
+  ignore_errors: yes
+  changed_when: false
+  always_run: yes
+
 - name: firewalldでHTTPを許可
   sudo: yes
   command: firewall-cmd --zone=public --add-service=http --permanent
+  when: firewalld_is_running.stdout.find('not running') == -1
 
 - name: firewalldのポリシーをリロード
   sudo: yes
   command: firewall-cmd --reload
+  when: firewalld_is_running.stdout.find('not running') == -1
 
 - name: 開発ツールのインストール
   sudo: yes

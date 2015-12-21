@@ -31,6 +31,8 @@
 - name: PassengerのApache用モジュールの設定を取得
   command:
     passenger-install-apache2-module --snippet
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
   register:
     passenger_snippet_vars
   changed_when: false

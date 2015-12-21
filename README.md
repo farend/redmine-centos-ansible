@@ -52,7 +52,7 @@ cd redmine-centos-ansible
 ansible-playbook -i hosts site.yml
 ```
 
-10〜20分ほどでインストールが完了します。webブラウザで `http://サーバIPアドレス` にアクセスしてください。Redmineの画面が表示されるはずです。
+10〜20分ほどでインストールが完了します。webブラウザで `http://サーバIPアドレス/redmine` にアクセスしてください。Redmineの画面が表示されるはずです。
 
 
 ## ライセンス

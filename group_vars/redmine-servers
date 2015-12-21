@@ -1,10 +1,12 @@
 # ----------------------------------------------------------------------
 # データベースの redmine ユーザーのパスワード (変更推奨)
-db_passwd_redmine: Must_be_changed!
+db_passwd_redmine: password
 # ----------------------------------------------------------------------
+# Redmineのバージョン
+redmine_version: 3.2.0
 
-# Redmineのチェックアウト元URL
-redmine_svn_url: http://svn.redmine.org/redmine/branches/3.2-stable
+# Redmineのクローン元URL
+redmine_git_url: https://github.com/redmine/redmine.git
 
 # Redmineのデプロイ先ディレクトリ
 redmine_dir: /var/lib/redmine

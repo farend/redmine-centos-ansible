@@ -1,8 +1,9 @@
-- name: Redmineのソースコードをチェックアウト
+- name: Redmineのソースコードをクローン
   sudo: yes
-  subversion:
-    repo={{ redmine_svn_url }}
+  git:
+    repo={{ redmine_git_url }}
     dest={{ redmine_dir }}
+    version={{ redmine_version }}
 
 - name: database.ymlの作成
   sudo: yes

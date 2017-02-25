@@ -61,7 +61,7 @@
 - name: そのほかのツールのインストール
   become: yes
   yum:
-    name='subversion,git'
+    name='subversion,git,which'
 
 - name: 作業ディレクトリ作成
   file: path={{ work_dir }}

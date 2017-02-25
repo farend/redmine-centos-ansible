@@ -1,5 +1,5 @@
 - name: Redmineディレクトリ以下のオーナーを変更
-  sudo: yes
+  become: yes
   command:
     chown -R {{ redmine_dir_owner }} {{ redmine_dir }}
 
@@ -12,7 +12,7 @@
   changed_when: false
 
 - name: Passengerをインストール
-  sudo: yes
+  become: yes
   gem:
     name=passenger
     user_install=no
@@ -21,7 +21,7 @@
   when: result.rc == 1
 
 - name: PassengerのApache用モジュールのインストール
-  sudo: yes
+  become: yes
   command:
     passenger-install-apache2-module --auto
   environment:
@@ -38,20 +38,20 @@
   changed_when: false
 
 - name: redmine.confの作成
-  sudo: yes
+  become: yes
   template:
     src=redmine.conf
     dest=/etc/httpd/conf.d/redmine.conf
 
 - name: Redmineに /redmine でアクセスするためのシンボリックリンク作成
-  sudo: yes
+  become: yes
   file:
     state=link
     src={{ redmine_dir }}/public
     dest=/var/www/html/redmine
 
 - name: httpdの再起動
-  sudo: yes
+  become: yes
   service:
     name=httpd
     state=restarted

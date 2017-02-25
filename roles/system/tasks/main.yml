@@ -7,17 +7,17 @@
   failed_when: result.rc not in [0, 1]
 
 - name: 起動時にSELinux無効化 (/etc/sysconfig/selinux)
-  sudo: yes
+  become: yes
   selinux: state=disabled
   when: result.rc == 0
 
 - name: SELinux無効化 (setenforce)
-  sudo: yes
+  become: yes
   command: setenforce 0
   when: result.rc == 0
 
 - name: firewalldが起動しているか確認
-  sudo: yes
+  become: yes
   shell: firewall-cmd --state
   register: firewall_state
   ignore_errors: yes
@@ -25,41 +25,41 @@
   check_mode: no
 
 - name: firewalldでHTTPを許可
-  sudo: yes
+  become: yes
   command: firewall-cmd --zone=public --add-service=http --permanent
   when: firewall_state.rc == 0
 
 - name: firewalldのポリシーをリロード
-  sudo: yes
+  become: yes
   command: firewall-cmd --reload
   when: firewall_state.rc == 0
 
 - name: 開発ツールのインストール
-  sudo: yes
+  become: yes
   yum: name='@Development Tools'
 
 - name: RubyとPassengerのビルドに必要な開発ツールやヘッダファイルのインストール
-  sudo: yes
+  become: yes
   yum:
     name='openssl-devel,readline-devel,zlib-devel,curl-devel,libyaml-devel,libffi-devel'
 
 - name:  PostgreSQLとヘッダファイルのインストール
-  sudo: yes
+  become: yes
   yum:
     name='postgresql-server,postgresql-devel,python-psycopg2'
 
 - name: Apacheとヘッダファイルのインストール
-  sudo: yes
+  become: yes
   yum:
     name='httpd,httpd-devel'
 
 - name: ImageMagickとヘッダファイル・日本語フォントのインストール
-  sudo: yes
+  become: yes
   yum:
     name='ImageMagick,ImageMagick-devel,ipa-pgothic-fonts'
 
 - name: そのほかのツールのインストール
-  sudo: yes
+  become: yes
   yum:
     name='subversion,git'
 

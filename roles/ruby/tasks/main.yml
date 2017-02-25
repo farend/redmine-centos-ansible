@@ -40,14 +40,14 @@
   when: ruby_test_vars.rc == 1
 
 - name: Rubyのインストール
-  sudo: yes
+  become: yes
   command:
     make install
     chdir={{ work_dir }}/{{ ruby_archive_version }}
   when: ruby_test_vars.rc == 1
 
 - name: bundlerのインストール
-  sudo: yes
+  become: yes
   gem:
     name=bundler
     user_install=no

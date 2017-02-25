@@ -7,7 +7,7 @@
   changed_when: result.rc == 0
 
 - name: pg_hba.confにredmine用設定が存在するか確認
-  sudo: yes
+  become: yes
   command:
     grep redmine {{ pg_hba_conf_path }}
   register:
@@ -16,7 +16,7 @@
   changed_when: false
 
 - name: pg_hba.conf設定変更用パッチを配置
-  sudo: yes
+  become: yes
   copy:
     src=pg_hba_conf.patch
     dest={{ work_dir }}
@@ -24,14 +24,14 @@
     result_pg_hba.rc == 1
 
 - name: pg_hba.confにredmine用設定を追加
-  sudo: yes
+  become: yes
   shell:
     patch -tNp0 {{ pg_hba_conf_path }} < {{ work_dir }}/pg_hba_conf.patch
   when:
     result_pg_hba.rc == 1
 
 - name: PostgreSQL起動
-  sudo: yes
+  become: yes
   service:
     name=postgresql
     state=restarted

@@ -16,6 +16,10 @@
   command: setenforce 0
   when: result.rc == 0
 
+- name: firewalldをインストール
+  sudo: yes
+  yum: name='firewalld'
+
 - name: firewalldが起動しているか確認
   become: yes
   shell: firewall-cmd --state

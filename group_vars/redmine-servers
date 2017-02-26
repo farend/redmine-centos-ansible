@@ -4,7 +4,7 @@ db_passwd_redmine: Must_be_changed!
 # ----------------------------------------------------------------------
 
 # Redmineのチェックアウト元URL
-redmine_svn_url: http://svn.redmine.org/redmine/branches/3.2-stable
+redmine_svn_url: http://svn.redmine.org/redmine/branches/3.3-stable
 
 # Redmineのデプロイ先ディレクトリ
 redmine_dir: /var/lib/redmine
@@ -20,8 +20,8 @@ redmine_font_path: /usr/share/fonts/truetype/takao-gothic/TakaoPGothic.ttf
 pg_hba_conf_path: /var/lib/pgsql/data/pg_hba.conf
 
 # ダウンロードするRubyのソースコード
-ruby_url_dir: https://cache.ruby-lang.org/pub/ruby/2.2
-ruby_archive_version: ruby-2.2.3
+ruby_url_dir: https://cache.ruby-lang.org/pub/ruby/2.3
+ruby_archive_version: ruby-2.3.3
 ruby_archive_ext: tar.bz2
 ruby_archive_name: "{{ ruby_archive_version }}.{{ ruby_archive_ext }}"
 

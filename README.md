@@ -10,20 +10,20 @@
 
 Ansibleを使ってRedmineを自動インストールするためのプレイブックです。以下のwebサイトで紹介されている手順におおむね準拠しています。
 
-[Redmine 3.2をCentOS 7.1にインストールする手順](http://blog.redmine.jp/articles/3_2/install/centos/)
+[Redmine 3.3をCentOS 7.3にインストールする手順](http://blog.redmine.jp/articles/3_3/install/centos/)
 
 
 ## システム構成
 
 * Redmine 3.3
-* CentOS 7
+* CentOS 7.3
 * PostgreSQL
 * Apache
 
 
 ## Redmineのインストール手順
 
-インストール直後の CentOS 7 に root でログインし以下の操作を行ってください。
+インストール直後の CentOS 7.3 に root でログインし以下の操作を行ってください。
 
 
 ### Ansibleとgitのインストール

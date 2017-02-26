@@ -1,4 +1,5 @@
 - name: PostgreSQL initdb
+  become: yes
   command:
     postgresql-setup initdb
   register:

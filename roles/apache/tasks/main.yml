@@ -46,13 +46,6 @@
     src=redmine.conf
     dest=/etc/httpd/conf.d/redmine.conf
 
-- name: Redmineに /redmine でアクセスするためのシンボリックリンク作成
-  become: yes
-  file:
-    state=link
-    src={{ redmine_dir }}/public
-    dest=/var/www/html/redmine
-
 - name: httpdの再起動
   become: yes
   service:

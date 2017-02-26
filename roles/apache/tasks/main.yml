@@ -1,7 +1,10 @@
 - name: Redmineディレクトリ以下のオーナーを変更
   become: yes
-  command:
-    chown -R {{ redmine_dir_owner }} {{ redmine_dir }}
+  file:
+    path: "{{ redmine_dir }}"
+    owner: "{{ redmine_dir_owner }}"
+    group: "{{ redmine_dir_group }}"
+    recurse: yes
 
 - name: Passengerがインストールされているか確認
   command:

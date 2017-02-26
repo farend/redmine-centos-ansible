@@ -10,7 +10,8 @@ redmine_svn_url: http://svn.redmine.org/redmine/branches/3.2-stable
 redmine_dir: /var/lib/redmine
 
 # Redmineのデプロイ先ディレクトリのオーナー:グループ
-redmine_dir_owner: apache:apache
+redmine_dir_owner: apache
+redmine_dir_group: apache
 
 # Redmineで使用する日本語フォントファイル
 redmine_font_path: /usr/share/fonts/truetype/takao-gothic/TakaoPGothic.ttf

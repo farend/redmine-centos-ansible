@@ -10,7 +10,7 @@
 
 Ansibleを使ってRedmineを自動インストールするためのプレイブックです。以下のwebサイトで紹介されている手順におおむね準拠しています。
 
-[Redmine 3.3をCentOS 7.3にインストールする手順](http://blog.redmine.jp/articles/3_3/install/centos/)
+[Redmine 3.4をCentOS 7.3にインストールする手順](http://blog.redmine.jp/articles/3_4/install/centos/)
 
 
 ## システム構成

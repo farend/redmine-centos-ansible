@@ -1,3 +1,7 @@
+- name: install libselinux-python module
+  become: yes
+  yum: name="libselinux-python"
+
 - name: SELinuxの状態確認
   command:
     /usr/sbin/selinuxenabled
@@ -24,15 +28,15 @@
   changed_when: false
   check_mode: no
 
-- name: firewalldでHTTPを許可
-  become: yes
-  command: firewall-cmd --zone=public --add-service=http --permanent
-  when: firewall_state.rc == 0
-
-- name: firewalldのポリシーをリロード
-  become: yes
-  command: firewall-cmd --reload
-  when: firewall_state.rc == 0
+#- name: firewalldでHTTPを許可
+#  become: yes
+#  command: firewall-cmd --zone=public --add-service=http --permanent
+#  when: firewall_state.rc == 0
+#
+#- name: firewalldのポリシーをリロード
+#  become: yes
+#  command: firewall-cmd --reload
+#  when: firewall_state.rc == 0
 
 - name: 開発ツールのインストール
   become: yes
@@ -61,7 +65,7 @@
 - name: そのほかのツールのインストール
   become: yes
   yum:
-    name='subversion,git,which'
+    name='subversion,git,which,gcc-c++,redhat-rpm-config'
 
 - name: 作業ディレクトリ作成
   file: path={{ work_dir }}

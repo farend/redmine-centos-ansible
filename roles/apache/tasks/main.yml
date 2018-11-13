@@ -6,13 +6,13 @@
     group: "{{ redmine_dir_group }}"
     recurse: yes
 
-- name: Passengerがインストールされているか確認
-  command:
-    test -f /usr/local/bin/passenger-install-apache2-module
-  register:
-    result
-  failed_when: result.rc not in [0, 1]
-  changed_when: false
+#- name: Passengerがインストールされているか確認
+#  command:
+#    test -f /usr/local/bin/passenger-install-apache2-module
+#  register:
+#    result
+#  failed_when: result.rc not in [0, 1]
+#  changed_when: false
 
 - name: Passengerをインストール
   become: yes
@@ -52,3 +52,14 @@
     name=httpd
     state=restarted
     enabled=yes
+
+- name: firewalldでHTTPを許可
+  become: yes
+  command: firewall-cmd --add-service=http --permanent
+  when: firewall_state.rc == 0
+
+- name: firewalldのポリシーをリロード
+  become: yes
+  command: firewall-cmd --reload
+  when: firewall_state.rc == 0
+

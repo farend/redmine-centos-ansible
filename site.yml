@@ -1,4 +1,5 @@
 - hosts: redmine-servers
+  become: true
 
   roles:
     - system

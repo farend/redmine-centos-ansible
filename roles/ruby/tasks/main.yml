@@ -50,6 +50,7 @@
   become: yes
   gem:
     name=bundler
+    version=1.17.3
     user_install=no
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"

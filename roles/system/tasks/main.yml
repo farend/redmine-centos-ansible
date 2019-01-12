@@ -28,7 +28,7 @@
   become: yes
   firewalld:
     zone=public
-    port=80/tcp
+    service=http
     permanent=yes
     state=enabled
     immediate=yes

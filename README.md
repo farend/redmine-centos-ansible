@@ -15,22 +15,27 @@ Ansibleを使ってRedmineを自動インストールするためのプレイブ
 
 ## システム構成
 
-* Redmine 3.4
-* CentOS 7.3
+* Redmine 4.0
+* CentOS 8.0
 * PostgreSQL
 * Apache
 
 
 ## Redmineのインストール手順
 
-インストール直後の CentOS 7.3 に root でログインし以下の操作を行ってください。
+インストール直後の CentOS 8.0 に root でログインし以下の操作を行ってください。
 
 
 ### Ansibleとgitのインストール
 
 ```
-yum install -y epel-release
+yum update -y
+yum install -y epel-release glibc-locale-source
 yum install -y ansible git
+
+============= Dockerの場合は以下も実行する============
+yum install -y policycoreutils selinux-policy-targeted
+======================================================
 ```
 
 ### playbookのダウンロード

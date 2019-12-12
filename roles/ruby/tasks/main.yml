@@ -51,5 +51,6 @@
   gem:
     name=bundler
     user_install=no
+    version=1.17.3
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"

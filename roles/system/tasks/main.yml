@@ -54,7 +54,7 @@
     name='httpd,httpd-devel'
 
 - name: powertoolのインストール
-  shell: dnf config-manager --set-enabled PowerTools warn=no
+  shell: dnf config-manager --set-enabled powertools warn=no
 
 - name: ImageMagickとヘッダファイル・日本語フォントのインストール
   become: yes

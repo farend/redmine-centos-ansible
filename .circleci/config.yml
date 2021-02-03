@@ -1,0 +1,40 @@
+version: 2
+
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Setup Centos container
+          # Use machine executer to execute run command with privileged option
+          command: |
+            docker pull centos:8
+            docker run --privileged -d --name centos -v /home/circleci/project:/redmine_centos_ansible centos:8 /sbin/init
+      - run:
+          name: Install packages
+          command: |
+            docker exec -it centos yum update -y
+            docker exec -it centos yum install -y epel-release glibc-locale-source
+            docker exec -it centos yum install -y ansible git
+            docker exec -it centos yum install -y policycoreutils selinux-policy-targeted firewalld sudo
+      - run:
+          name: Execute ansible playbook
+          # Test without -K option to make it non-interactive.
+          command: docker exec -it centos ansible-playbook -i /redmine_centos_ansible/hosts /redmine_centos_ansible/site.yml
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build
+  nightly:
+    triggers:
+      - schedule:
+          cron: "00 1 * * 1" # Every Monday at 1:00(UTC)
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - build

@@ -1,5 +1,7 @@
 # redmine-centos-ansible
 
+| :warning: CentOS 8の提供が2021年で終了されることが決まりました。このansible-playbookはこれ以降のRedmineのバージョンアップに対応するための更新を行いません。 |
+| --- |
 
 最小構成でインストールしたCentOSにRedmineを自動インストールするためのAnsibleプレイブックです。
 
